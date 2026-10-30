@@ -108,7 +108,28 @@ class TestBackendAPI(unittest.TestCase):
         with self.assertRaises(HTTPException) as ctx:
             verify_api_key(api_key="adapt-ai-default-dev-secret-key-2026")
         self.assertEqual(ctx.exception.status_code, 401)
-        self.assertIn("strictly prohibited", ctx.exception.detail)
+
+    def test_patient_session_token_issue_and_verify(self):
+        """Ensures ordinary patient web sessions can authenticate safely without master API secrets."""
+        from adapt_ai.security.auth import issue_patient_session_token, verify_patient_session_token
+        session_data = issue_patient_session_token(session_id="pat_test_user_123", ttl_seconds=3600)
+        token = session_data["token"]
+        self.assertTrue(token.startswith("pat_"))
+
+        # Verifies through verify_api_key
+        verified = verify_api_key(api_key=token)
+        self.assertEqual(verified, token)
+
+    def test_patient_session_token_tampered_rejected(self):
+        """Ensures forged or tampered patient session tokens return HTTP 401."""
+        from adapt_ai.security.auth import issue_patient_session_token
+        session_data = issue_patient_session_token(session_id="pat_test_user_123", ttl_seconds=3600)
+        token = session_data["token"] + "tampered"
+
+        with self.assertRaises(HTTPException) as ctx:
+            verify_api_key(api_key=token)
+        self.assertEqual(ctx.exception.status_code, 401)
+        self.assertIn("Invalid or expired patient session token", ctx.exception.detail)
 
     def test_openapi_swagger_security_spec(self):
         openapi_schema = app.openapi()

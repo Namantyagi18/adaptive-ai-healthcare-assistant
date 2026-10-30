@@ -31,6 +31,7 @@ from adapt_ai.api.routes.rag import router as rag_router
 from adapt_ai.api.routes.media import router as media_router
 from adapt_ai.api.routes.training import router as training_router
 from adapt_ai.api.routes.eval_routes import router as eval_router
+from adapt_ai.api.routes.auth_routes import router as auth_router
 
 
 @asynccontextmanager
@@ -203,3 +204,4 @@ app.include_router(rag_router, prefix=API_V1_PREFIX)
 app.include_router(media_router, prefix=API_V1_PREFIX)
 app.include_router(training_router, prefix=API_V1_PREFIX)
 app.include_router(eval_router, prefix=API_V1_PREFIX)
+app.include_router(auth_router, prefix=API_V1_PREFIX)
