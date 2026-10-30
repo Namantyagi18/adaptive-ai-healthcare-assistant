@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+*.py.class
+.env
+.venv/
+venv/
+data/rag_index/*.db
+data/secure_uploads/*
+data/eval_reports/*.json
+data/finetuning_dataset/
+data/test_job_out/
+data/test_prep/
+.env.*
+!.env.example
