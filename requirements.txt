@@ -1,4 +1,4 @@
-fastapi
+﻿fastapi
 uvicorn[standard]
 python-dotenv
 pydantic
@@ -8,6 +8,3 @@ PyYAML
 Pillow
 python-multipart
 httpx
-pytest
-pytest-asyncio
-torch
